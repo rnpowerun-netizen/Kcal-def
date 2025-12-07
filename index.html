@@ -4,10 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kcal Deficito Skaičiuoklė</title>
-
-  <!-- Paprastas SEO -->
   <meta name="description" content="Paprasta Kcal deficito skaičiuoklė: įvesk BMR, aktyvumą ir sporto sudeginimą, gauk nesporto ir sporto dienų kalorijų normą." />
-
   <style>
     :root {
       --bg: #050608;
@@ -16,14 +13,9 @@
       --accent-soft: rgba(41,179,107,0.12);
       --text-main: #f5f7ff;
       --text-muted: #a5adcf;
-      --danger: #ff5c5c;
       --border: #252838;
     }
-
-    * {
-      box-sizing: border-box;
-    }
-
+    * { box-sizing: border-box; }
     body {
       margin: 0;
       padding: 0;
@@ -31,30 +23,14 @@
       background: radial-gradient(circle at top, #141827 0, #050608 55%, #020206 100%);
       color: var(--text-main);
     }
-
-    .page {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 24px 16px 40px;
-    }
-
-    header {
-      text-align: center;
-      margin-bottom: 28px;
-    }
-
+    .page { max-width: 960px; margin: 0 auto; padding: 24px 16px 40px; }
+    header { text-align: center; margin-bottom: 28px; }
     header h1 {
       margin: 4px 0 8px;
       font-size: clamp(1.8rem, 3vw, 2.3rem);
       letter-spacing: 0.02em;
     }
-
-    header p {
-      margin: 0;
-      color: var(--text-muted);
-      font-size: 0.95rem;
-    }
-
+    header p { margin: 0; color: var(--text-muted); font-size: 0.95rem; }
     .badge {
       display: inline-flex;
       align-items: center;
@@ -68,19 +44,12 @@
       text-transform: uppercase;
       letter-spacing: 0.08em;
     }
-
     main {
       display: grid;
       grid-template-columns: minmax(0, 2fr) minmax(0, 1.7fr);
       gap: 24px;
     }
-
-    @media (max-width: 800px) {
-      main {
-        grid-template-columns: minmax(0, 1fr);
-      }
-    }
-
+    @media (max-width: 800px) { main { grid-template-columns: minmax(0, 1fr); } }
     .card {
       background: var(--card-bg);
       border-radius: 18px;
@@ -90,21 +59,14 @@
         0 18px 40px rgba(0,0,0,0.6),
         0 0 0 1px rgba(255,255,255,0.02);
     }
-
-    h2 {
-      margin-top: 0;
-      margin-bottom: 14px;
-      font-size: 1.2rem;
-    }
-
+    h2 { margin-top: 0; margin-bottom: 14px; font-size: 1.2rem; }
     label {
       display: block;
       margin-top: 12px;
       font-size: 0.9rem;
       font-weight: 600;
     }
-
-    input[type="number"] {
+    input[type="number"], select {
       width: 100%;
       margin-top: 6px;
       padding: 8px 10px;
@@ -115,29 +77,24 @@
       font-size: 0.95rem;
       outline: none;
       transition: border-color 0.15s ease, box-shadow 0.15s ease;
-      -moz-appearance: textfield;
     }
-
     input[type="number"]::-webkit-outer-spin-button,
     input[type="number"]::-webkit-inner-spin-button {
       -webkit-appearance: none;
       margin: 0;
     }
-
-    input[type="number"]:focus {
+    input[type="number"]:focus, select:focus {
       border-color: var(--accent);
       box-shadow: 0 0 0 1px rgba(41,179,107,0.38);
     }
-
     small {
       display: block;
       margin-top: 2px;
       font-size: 0.78rem;
       color: var(--text-muted);
     }
-
     button {
-      margin-top: 18px;
+      margin-top: 14px;
       padding: 9px 18px;
       border-radius: 999px;
       border: none;
@@ -152,22 +109,33 @@
       box-shadow: 0 10px 30px rgba(41,179,107,0.45);
       transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
     }
-
     button:hover {
       transform: translateY(-1px);
       box-shadow: 0 14px 34px rgba(41,179,107,0.55);
     }
-
     button:active {
       transform: translateY(0);
       box-shadow: 0 6px 18px rgba(41,179,107,0.5);
       background: #1ea45f;
     }
-
-    button span.icon {
-      font-size: 1.1rem;
+    button span.icon { font-size: 1.1rem; }
+    .btn-secondary {
+      background: #22263a;
+      color: var(--text-main);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.6);
     }
-
+    .btn-secondary:hover {
+      background: #2b3050;
+      box-shadow: 0 10px 24px rgba(0,0,0,0.7);
+    }
+    .row-inline {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 10px;
+    }
+    @media (max-width: 600px) {
+      .row-inline { grid-template-columns: minmax(0, 1fr); }
+    }
     .result-box {
       margin-top: 18px;
       padding: 14px 14px 10px;
@@ -176,7 +144,6 @@
       border: 1px solid rgba(71, 232, 148, 0.32);
       font-size: 0.95rem;
     }
-
     .result-row {
       display: flex;
       justify-content: space-between;
@@ -184,23 +151,9 @@
       margin-bottom: 6px;
       gap: 10px;
     }
-
-    .result-label {
-      color: var(--text-muted);
-      font-size: 0.86rem;
-    }
-
-    .result-value {
-      font-weight: 700;
-      font-size: 1.02rem;
-    }
-
-    .result-note {
-      margin-top: 6px;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
+    .result-label { color: var(--text-muted); font-size: 0.86rem; }
+    .result-value { font-weight: 700; font-size: 1.02rem; }
+    .result-note { margin-top: 6px; font-size: 0.78rem; color: var(--text-muted); }
     .pill {
       display: inline-flex;
       align-items: center;
@@ -211,52 +164,22 @@
       border: 1px solid rgba(255,255,255,0.12);
       color: var(--text-muted);
     }
-
-    .pill span {
-      width: 8px;
-      height: 8px;
-      border-radius: 999px;
-    }
-
-    .pill-rest span {
-      background: var(--accent);
-    }
-
-    .pill-sport span {
-      background: #00b0ff;
-    }
-
-    .info-list {
-      margin: 8px 0 0;
-      padding-left: 18px;
-      font-size: 0.9rem;
+    .pill span { width: 8px; height: 8px; border-radius: 999px; }
+    .pill-rest span { background: var(--accent); }
+    .pill-sport span { background: #00b0ff; }
+    .info-list { margin: 8px 0 0; padding-left: 18px; font-size: 0.9rem; color: var(--text-muted); }
+    .info-list li { margin-bottom: 4px; }
+    .tagline { font-size: 0.9rem; color: var(--text-muted); margin-bottom: 6px; }
+    footer { margin-top: 24px; text-align: center; font-size: 0.78rem; color: var(--text-muted); }
+    footer a { color: var(--accent); text-decoration: none; }
+    footer a:hover { text-decoration: underline; }
+    .bmr-display {
+      margin-top: 4px;
+      font-size: 0.8rem;
       color: var(--text-muted);
     }
-
-    .info-list li {
-      margin-bottom: 4px;
-    }
-
-    .tagline {
-      font-size: 0.9rem;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
-
-    footer {
-      margin-top: 24px;
-      text-align: center;
-      font-size: 0.78rem;
-      color: var(--text-muted);
-    }
-
-    footer a {
+    .bmr-display strong {
       color: var(--accent);
-      text-decoration: none;
-    }
-
-    footer a:hover {
-      text-decoration: underline;
     }
   </style>
 </head>
@@ -273,6 +196,43 @@
       <section class="card">
         <h2>Skaičiuoklė</h2>
         <p class="tagline">Visi laukai redaguojami. Skaičiai tik pavyzdiniai – prisitaikyk pagal save.</p>
+
+        <!-- BMR skaičiuoklė -->
+        <label>BMR skaičiuoklė</label>
+        <small>Įvesk ūgį, svorį, amžių ir lytį – BMR apskaičiuos ir įrašys žemiau.</small>
+
+        <div class="row-inline">
+          <div>
+            <label for="weight">Svoris (kg):</label>
+            <input type="number" id="weight" value="106" />
+          </div>
+          <div>
+            <label for="height">Ūgis (cm):</label>
+            <input type="number" id="height" value="185" />
+          </div>
+        </div>
+
+        <div class="row-inline">
+          <div>
+            <label for="age">Amžius (m.):</label>
+            <input type="number" id="age" value="30" />
+          </div>
+          <div>
+            <label for="sex">Lytis:</label>
+            <select id="sex">
+              <option value="M">Vyras</option>
+              <option value="F">Moteris</option>
+            </select>
+          </div>
+        </div>
+
+        <button type="button" class="btn-secondary" onclick="calcBMR()">
+          <span class="icon">🧮</span>
+          Skaičiuoti BMR ir įrašyti
+        </button>
+        <div class="bmr-display" id="bmrInfo">
+          Dabartinis BMR laukelio dydis: <strong><span id="bmrCurrent">2100</span> kcal</strong>
+        </div>
 
         <label for="bmr">BMR (kcal):</label>
         <input type="number" id="bmr" value="2100" />
@@ -341,6 +301,32 @@
   </div>
 
   <script>
+    function calcBMR() {
+      const weight = Number(document.getElementById("weight").value) || 0;
+      const height = Number(document.getElementById("height").value) || 0;
+      const age = Number(document.getElementById("age").value) || 0;
+      const sex = document.getElementById("sex").value || "M";
+
+      if (!weight || !height || !age) {
+        alert("Įvesk svorį, ūgį ir amžių.");
+        return;
+      }
+
+      // Mifflin-St Jeor formulė
+      let bmrCalc = 10 * weight + 6.25 * height - 5 * age;
+      if (sex === "M") {
+        bmrCalc += 5;
+      } else {
+        bmrCalc -= 161;
+      }
+
+      const rounded = Math.round(bmrCalc);
+      document.getElementById("bmr").value = rounded;
+      document.getElementById("bmrCurrent").textContent = rounded;
+      document.getElementById("bmrInfo").innerHTML =
+        'Apskaičiuotas BMR: <strong>' + rounded + ' kcal</strong> (įrašyta į laukelį žemiau).';
+    }
+
     function calculate() {
       const bmr = Number(document.getElementById("bmr").value) || 0;
       const idle = Number(document.getElementById("idle").value) || 0;
@@ -348,10 +334,7 @@
       const deficitRest = Number(document.getElementById("deficitRest").value) || 0;
       const deficitSport = Number(document.getElementById("deficitSport").value) || 0;
 
-      // Nesporto diena: BMR + neveiklus aktyvumas - deficitas
       const restDay = bmr + idle - deficitRest;
-
-      // Sporto diena: BMR + neveiklus aktyvumas + sportas - deficitas
       const sportDay = bmr + idle + sport - deficitSport;
 
       const output = document.getElementById("output");
@@ -372,6 +355,9 @@
         note.textContent =
           "Įvesk korektiškus skaičius (BMR, aktyvumą, sportą ir deficitus), kad gautum rezultatą.";
       }
+
+      const bmrCurrent = document.getElementById("bmrCurrent");
+      if (bmrCurrent) bmrCurrent.textContent = bmr.toFixed(0);
     }
   </script>
 </body>
