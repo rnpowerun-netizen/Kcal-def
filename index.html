@@ -3,40 +3,342 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Kcal Deficito Skaičiuoklė v2</title>
+  <title>Kcal Deficito Skaičiuoklė</title>
+
+  <!-- Paprastas SEO -->
+  <meta name="description" content="Paprasta Kcal deficito skaičiuoklė: įvesk BMR, aktyvumą ir sporto sudeginimą, gauk nesporto ir sporto dienų kalorijų normą." />
+
   <style>
-    body { font-family: Arial, sans-serif; max-width: 480px; margin: 20px auto; padding: 20px; border: 1px solid #ccc; border-radius: 12px; }
-    label { display: block; margin-top: 12px; font-weight: bold; }
-    input { width: 100%; padding: 8px; margin-top: 4px; font-size: 16px; box-sizing: border-box; }
-    .result { margin-top: 20px; padding: 15px; background: #f2f2f2; border-radius: 10px; }
-    small { color: #555; }
-    button { margin-top:20px; padding:10px 15px; font-size:16px; cursor:pointer; }
+    :root {
+      --bg: #050608;
+      --card-bg: #11131a;
+      --accent: #29b36b;
+      --accent-soft: rgba(41,179,107,0.12);
+      --text-main: #f5f7ff;
+      --text-muted: #a5adcf;
+      --danger: #ff5c5c;
+      --border: #252838;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #141827 0, #050608 55%, #020206 100%);
+      color: var(--text-main);
+    }
+
+    .page {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+    header {
+      text-align: center;
+      margin-bottom: 28px;
+    }
+
+    header h1 {
+      margin: 4px 0 8px;
+      font-size: clamp(1.8rem, 3vw, 2.3rem);
+      letter-spacing: 0.02em;
+    }
+
+    header p {
+      margin: 0;
+      color: var(--text-muted);
+      font-size: 0.95rem;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent);
+      font-size: 0.78rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    main {
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 1.7fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 800px) {
+      main {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+
+    .card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      border: 1px solid var(--border);
+      padding: 18px 18px 20px;
+      box-shadow:
+        0 18px 40px rgba(0,0,0,0.6),
+        0 0 0 1px rgba(255,255,255,0.02);
+    }
+
+    h2 {
+      margin-top: 0;
+      margin-bottom: 14px;
+      font-size: 1.2rem;
+    }
+
+    label {
+      display: block;
+      margin-top: 12px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    input[type="number"] {
+      width: 100%;
+      margin-top: 6px;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #080a10;
+      color: var(--text-main);
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+      -moz-appearance: textfield;
+    }
+
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    input[type="number"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(41,179,107,0.38);
+    }
+
+    small {
+      display: block;
+      margin-top: 2px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    button {
+      margin-top: 18px;
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: none;
+      background: var(--accent);
+      color: #020203;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 30px rgba(41,179,107,0.45);
+      transition: transform 0.08s ease, box-shadow 0.08s ease, background 0.12s ease;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 34px rgba(41,179,107,0.55);
+    }
+
+    button:active {
+      transform: translateY(0);
+      box-shadow: 0 6px 18px rgba(41,179,107,0.5);
+      background: #1ea45f;
+    }
+
+    button span.icon {
+      font-size: 1.1rem;
+    }
+
+    .result-box {
+      margin-top: 18px;
+      padding: 14px 14px 10px;
+      border-radius: 14px;
+      background: radial-gradient(circle at top left, rgba(41,179,107,0.21), transparent 55%);
+      border: 1px solid rgba(71, 232, 148, 0.32);
+      font-size: 0.95rem;
+    }
+
+    .result-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+      gap: 10px;
+    }
+
+    .result-label {
+      color: var(--text-muted);
+      font-size: 0.86rem;
+    }
+
+    .result-value {
+      font-weight: 700;
+      font-size: 1.02rem;
+    }
+
+    .result-note {
+      margin-top: 6px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.74rem;
+      border: 1px solid rgba(255,255,255,0.12);
+      color: var(--text-muted);
+    }
+
+    .pill span {
+      width: 8px;
+      height: 8px;
+      border-radius: 999px;
+    }
+
+    .pill-rest span {
+      background: var(--accent);
+    }
+
+    .pill-sport span {
+      background: #00b0ff;
+    }
+
+    .info-list {
+      margin: 8px 0 0;
+      padding-left: 18px;
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .info-list li {
+      margin-bottom: 4px;
+    }
+
+    .tagline {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    footer {
+      margin-top: 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+    }
+
+    footer a {
+      color: var(--accent);
+      text-decoration: none;
+    }
+
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h2>Kcal Deficito Skaičiuoklė</h2>
+  <div class="page">
+    <header>
+      <div class="badge">Kcal deficito skaičiuoklė</div>
+      <h1>Kasdienio deficitų planavimo įrankis</h1>
+      <p>Įvesk savo BMR, aktyvumą ir sporto sudeginimą – gausi aiškų nesporto ir sporto dienų valgymo kiekį.</p>
+    </header>
 
-  <label>BMR (kcal):</label>
-  <input type="number" id="bmr" value="2100" />
-  <small>Bazinė medžiagų apykaita per parą.</small>
+    <main>
+      <!-- Skaičiuoklė -->
+      <section class="card">
+        <h2>Skaičiuoklė</h2>
+        <p class="tagline">Visi laukai redaguojami. Skaičiai tik pavyzdiniai – prisitaikyk pagal save.</p>
 
-  <label>Neveiklios dienos aktyvumas (kcal):</label>
-  <input type="number" id="idle" value="200" />
-  <small>Papildomai sudeginama per vaikščiojimą / minimalų judėjimą be sporto.</small>
+        <label for="bmr">BMR (kcal):</label>
+        <input type="number" id="bmr" value="2100" />
+        <small>Bazinė medžiagų apykaita per parą (kiek sudegini visiškai ramiai).</small>
 
-  <label>Sporto sudeginimas (kcal):</label>
-  <input type="number" id="sport" value="500" />
-  <small>Kiek sudegini per treniruotę (bėgtakis, salė ir t.t.).</small>
+        <label for="idle">Neveiklios dienos aktyvumas (kcal):</label>
+        <input type="number" id="idle" value="200" />
+        <small>Papildomai sudeginama per vaikščiojimą ir minimalų judėjimą be sporto.</small>
 
-  <label>Nesporto dienos deficitas (kcal):</label>
-  <input type="number" id="deficitRest" value="900" />
+        <label for="sport">Sporto sudeginimas (kcal):</label>
+        <input type="number" id="sport" value="900" />
+        <small>Apytikslės kalorijos per treniruotę (bėgtakis, salė ir pan.).</small>
 
-  <label>Sporto dienos deficitas (kcal):</label>
-  <input type="number" id="deficitSport" value="500" />
+        <label for="deficitRest">Nesporto dienos deficitas (kcal):</label>
+        <input type="number" id="deficitRest" value="600" />
+        <small>Kiek kalorijų „nukerti“ neverkdydamas organizmo. Pvz. 500–700.</small>
 
-  <button onclick="calculate()">Skaičiuoti</button>
+        <label for="deficitSport">Sporto dienos deficitas (kcal):</label>
+        <input type="number" id="deficitSport" value="700" />
+        <small>Šiek tiek agresyvesnis deficitas sporto dienai. Pvz. 500–800.</small>
 
-  <div class="result" id="output"></div>
+        <button type="button" onclick="calculate()">
+          <span class="icon">⚡</span>
+          Skaičiuoti
+        </button>
+
+        <div class="result-box" id="output">
+          <div class="result-row">
+            <div class="result-label pill pill-rest"><span></span> Nesporto diena</div>
+            <div class="result-value">–</div>
+          </div>
+          <div class="result-row">
+            <div class="result-label pill pill-sport"><span></span> Sporto diena</div>
+            <div class="result-value">–</div>
+          </div>
+          <div class="result-note">
+            Įvesk savo skaičius ir paspausk „Skaičiuoti“, kad matytum rekomenduojamą valgymo kiekį.
+          </div>
+        </div>
+      </section>
+
+      <!-- Paaiškinimas -->
+      <section class="card">
+        <h2>Kaip veikia formulė</h2>
+        <p class="tagline">Principas paprastas: deficitas sukuriamas iš to, kiek suvalgai, minus kiek sudegini.</p>
+
+        <ul class="info-list">
+          <li><strong>Nesporto diena</strong> = BMR + neveiklus aktyvumas – pasirinktas deficitas.</li>
+          <li><strong>Sporto diena</strong> = BMR + neveiklus aktyvumas + sporto sudeginimas – pasirinktas deficitas.</li>
+          <li><strong>BMR</strong> – bazinė medžiagų apykaita (kcal per dieną gulint lovoje).</li>
+          <li><strong>Deficitas</strong> – kiek kcal mažiau suvalgai, nei sudegini (pvz. –600).</li>
+        </ul>
+
+        <h2 style="margin-top:18px;">Praktinė rekomendacija</h2>
+        <ul class="info-list">
+          <li>Vidutiniškai saugus deficitas daugumai žmonių – apie 500–800 kcal per dieną.</li>
+          <li>Kuo didesnis sporto sudeginimas, tuo daugiau gali valgyti išlaikydamas tą patį deficitą.</li>
+          <li>Stebėk savijautą: jei energija krenta per stipriai, šiek tiek sumažink deficitą.</li>
+        </ul>
+      </section>
+    </main>
+
+    <footer>
+      <p>Kcal Deficito skaičiuoklė · sukurta asmeniniam naudojimui. Gali dalintis nuoroda su kitais.</p>
+    </footer>
+  </div>
 
   <script>
     function calculate() {
@@ -52,10 +354,24 @@
       // Sporto diena: BMR + neveiklus aktyvumas + sportas - deficitas
       const sportDay = bmr + idle + sport - deficitSport;
 
-      document.getElementById("output").innerHTML = `
-        <b>Nesporto dienos valgymas:</b> ${restDay.toFixed(0)} kcal<br><br>
-        <b>Sporto dienos valgymas:</b> ${sportDay.toFixed(0)} kcal
-      `;
+      const output = document.getElementById("output");
+      const rows = output.querySelectorAll(".result-row .result-value");
+
+      rows[0].textContent = restDay > 0 ? restDay.toFixed(0) + " kcal" : "–";
+      rows[1].textContent = sportDay > 0 ? sportDay.toFixed(0) + " kcal" : "–";
+
+      const note = output.querySelector(".result-note");
+      if (restDay > 0 && sportDay > 0) {
+        note.textContent =
+          "Nesporto dienomis siek apie " +
+          restDay.toFixed(0) +
+          " kcal, sporto dienomis – apie " +
+          sportDay.toFixed(0) +
+          " kcal (pagal tavo pasirinktas reikšmes).";
+      } else {
+        note.textContent =
+          "Įvesk korektiškus skaičius (BMR, aktyvumą, sportą ir deficitus), kad gautum rezultatą.";
+      }
     }
   </script>
 </body>
